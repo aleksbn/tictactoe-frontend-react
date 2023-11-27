@@ -6,6 +6,7 @@ import auth from './services/authService';
 
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
+
 import NavBar from './components/layout/navbar';
 import LoginForm from './components/pages/login';
 import NotFound from './components/pages/notFound';
@@ -23,6 +24,13 @@ interface AppState {
 class App extends Component {
   state: AppState = {
     user: undefined
+
+import ProtectedRoute from './components/common/protectedRoute';
+import Logout from './components/pages/logout';
+
+class App extends Component {
+  state = {
+    user: null
   };
 
   componentDidMount() {
@@ -36,7 +44,8 @@ class App extends Component {
     return (
       <React.Fragment>
         <ToastContainer/>
-        <NavBar user={user}/><main className='container'>
+        <NavBar user={user}/>
+        <main className='container'>
           <Switch>
             <Route path="/not-found" component={NotFound}/>
             <ProtectedRoute path='/games' component={Games} />
