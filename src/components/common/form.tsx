@@ -1,19 +1,15 @@
 import React, { Component, ChangeEvent, FormEvent } from 'react';
 import Select from './select';
 import Input from './input';
-const Joi = require ('joi-browser');
+import { ErrorResponse } from '../../models/common';
+const Joi = require('joi-browser');
 
 interface FormState {
   data: { [key: string]: any };
-  errors: { [key: string]: string };
+  errors: ErrorResponse
 }
 
 class Form extends Component<{}, FormState> {
-  state: FormState = {
-    data: {},
-    errors: {},
-  };
-
   validate = () => {
     const options = { abortEarly: false };
     const { error } = Joi.validate(
@@ -22,7 +18,6 @@ class Form extends Component<{}, FormState> {
       options
     );
     if (!error) return null;
-
     const errors: { [key: string]: string } = {};
     for (let item of error.details) errors[item.path[0]] = item.message;
     return errors;
