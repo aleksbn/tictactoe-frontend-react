@@ -12,7 +12,7 @@ const Select: FC<SelectProps> = ({ name, label, options, error, ...rest }) => {
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
       <select name={name} id={name} {...rest} className="form-control">
-        <option value="" />
+        <option value="" disabled selected>Select a {name}</option>
         {options.map((option) => (
           <option key={option._id} value={option._id}>
             {option.name}

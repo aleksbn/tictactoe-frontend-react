@@ -20,7 +20,6 @@ class LoginForm extends Form {
       const { data } = this.state;
       const user: LoginUser = new LoginUser(data.username, data.password);
       await auth.login(user);
-      console.log(this.props);
       //@ts-ignore
       const { state } = this.props.location;
       window.location = state ? state.from.pathname : '/';
