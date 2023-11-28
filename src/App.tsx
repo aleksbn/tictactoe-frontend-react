@@ -6,6 +6,7 @@ import auth from './services/authService';
 
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
+
 import NavBar from './components/layout/navbar';
 import LoginForm from './components/pages/login';
 import NotFound from './components/pages/notFound';
@@ -24,9 +25,8 @@ interface AppState {
 }
 class App extends Component {
   state: AppState = {
-    user: undefined,
-  };
-
+    user: undefined
+  }
   componentDidMount() {
     const user = auth.getCurrentUser();
     this.setState({ user });

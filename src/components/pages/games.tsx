@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '../common/button';
 import Form from '../common/form';
+// @ts-ignore
 import Joi from 'joi-browser';
 
 class Games extends Form {
