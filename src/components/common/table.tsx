@@ -1,5 +1,5 @@
 import React from 'react';
-import TableBody from './tableData';
+import TableBody from './tableBody';
 import TableHeader from './tableHeader';
 
 interface TableProps {

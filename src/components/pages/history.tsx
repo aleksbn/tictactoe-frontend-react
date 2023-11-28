@@ -51,7 +51,7 @@ class History extends Component {
       movesToDisplayInTable = moves.map((m: Move) => {
         return [
           players.filter((p) => p.id === m.playerId)[0].nickname,
-          `X: ${m.xCoord}, Y: ${m.yCoord}`,
+          `Coords: ${m.xCoord} - ${m.yCoord}`,
         ];
       });
       winnerName = players[0].id === selectedGame.winnerId ? players[0].nickname : players[1].nickname;
@@ -68,12 +68,11 @@ class History extends Component {
         />
         {this.state.selectedGameId && (
           <div className="row">
-            <div className="col-2"></div>
             <div className="col-8">
               <h2 className="text-center">Table data</h2>
               <Table columns={columns} data={movesToDisplayInTable} />
             </div>
-            <div className="col-2"></div>
+            <div className="col-4"></div>
           </div>
         )}
         {this.state.selectedGameId && <h3>...and the winner is {winnerName}</h3>}
