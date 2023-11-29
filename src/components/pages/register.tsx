@@ -1,4 +1,5 @@
 import React from 'react';
+//@ts-ignore
 import Joi from 'joi-browser';
 import Form from '../common/form';
 import auth from '../../services/authService';

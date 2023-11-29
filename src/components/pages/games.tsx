@@ -72,7 +72,7 @@ class Games extends Form {
         <div className="row">
           <div className="col-3" />
           <div className="col-6">
-            <form onSubmit={this.doSubmit}>
+            <form>
               {this.renderInput('gameId', 'Game ID')}
             </form>
           </div>

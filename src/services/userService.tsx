@@ -13,6 +13,10 @@ export async function get() {
   return await http.get(userEndpoint);
 }
 
+export async function getnickname(userId: string) {
+  return await http.get(`${userEndpoint}/${userId}`);
+}
+
 export async function edit(
   _id: string,
   username: string,

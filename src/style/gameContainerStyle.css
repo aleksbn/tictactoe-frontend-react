@@ -1,0 +1,14 @@
+table {
+  align-self: center;
+  width: 50%;
+}
+
+td {
+  position: relative;
+  border: 2px solid black;
+  width: 33.33%;
+  padding: 15% 0;
+  text-align: center;
+  height: 100%;
+  font-size: 2em;
+}
