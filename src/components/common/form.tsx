@@ -1,13 +1,8 @@
 import React, { Component, ChangeEvent, FormEvent } from 'react';
 import Select from './select';
 import Input from './input';
-import { ErrorResponse } from '../../models/common';
+import { FormState } from '../../models/common';
 const Joi = require('joi-browser');
-
-interface FormState {
-  data: { [key: string]: any };
-  errors: ErrorResponse
-}
 
 class Form extends Component<{}, FormState> {
   validate = () => {

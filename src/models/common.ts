@@ -13,4 +13,10 @@ interface ErrorResponse {
   [key: string]: string;
 }
 
-export type { Option, FormFieldProps, ErrorResponse };
+
+interface FormState {
+  data: { [key: string]: any };
+  errors: ErrorResponse
+}
+
+export type { Option, FormFieldProps, ErrorResponse, FormState };

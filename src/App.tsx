@@ -17,22 +17,16 @@ import Logout from './components/pages/logout';
 import Register from './components/pages/register';
 import ProtectedRoute from './components/common/protectedRoute';
 import RegisterForm from './components/pages/register';
+import CreateGame from './components/pages/createGame';
+import PlayGame from './components/pages/playGame';
 
 interface AppState {
-  [key: string]: any
+  [key: string]: any;
 }
 class App extends Component {
   state: AppState = {
     user: undefined
-
-import ProtectedRoute from './components/common/protectedRoute';
-import Logout from './components/pages/logout';
-
-class App extends Component {
-  state = {
-    user: null
-  };
-
+  }
   componentDidMount() {
     const user = auth.getCurrentUser();
     this.setState({ user });
@@ -43,20 +37,29 @@ class App extends Component {
 
     return (
       <React.Fragment>
-        <ToastContainer/>
-        <NavBar user={user}/>
-        <main className='container'>
+        <ToastContainer />
+        <NavBar user={user} />
+        <main className="container">
           <Switch>
-            <Route path="/not-found" component={NotFound}/>
-            <ProtectedRoute path='/games' component={Games} />
-            <ProtectedRoute path='/history' component={History} />
-            <Route path="/login" component={LoginForm}/>
-            <Route path="/logout" component={Logout}/>
-            <Route path="/register" component={Register}/>
-            <ProtectedRoute path='/profile' component={RegisterForm}/>
-            <Route path="/home" component={Home}/>
-            <Redirect from='/' exact to='/home'/>
-            <Redirect to='/not-found'/>
+            <Route path="/not-found" component={NotFound} />
+            <ProtectedRoute
+              path="/games/againstpc"
+              render={(props) => <CreateGame {...props} opponent={'pc'} />}
+            />
+            <ProtectedRoute
+              path="/games/againstplayer"
+              render={(props) => <CreateGame {...props} opponent={'player'} />}
+            />
+            <ProtectedRoute path='/games/play/:id' component={PlayGame} />
+            <ProtectedRoute path="/games" component={Games} />
+            <ProtectedRoute path="/history" component={History} />
+            <Route path="/login" component={LoginForm} />
+            <Route path="/logout" component={Logout} />
+            <Route path="/register" component={Register} />
+            <ProtectedRoute path="/profile" component={RegisterForm} />
+            <Route path="/home" component={Home} />
+            <Redirect from="/" exact to="/home" />
+            <Redirect to="/not-found" />
           </Switch>
         </main>
       </React.Fragment>
