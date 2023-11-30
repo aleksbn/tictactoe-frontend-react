@@ -2,10 +2,11 @@ import { Link, NavLink } from 'react-router-dom';
 import React, { FC } from 'react';
 
 interface NavBarProps {
-  user: any
+  user: any,
+  nickname: string
 }
 
-const NavBar: FC<NavBarProps> = ({ user }) => {
+const NavBar: FC<NavBarProps> = ({ user, nickname }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <Link className="navbar-brand" to="/">
@@ -47,7 +48,7 @@ const NavBar: FC<NavBarProps> = ({ user }) => {
           {user && (
             <React.Fragment>
               <NavLink className="nav-item nav-link" to="/profile">
-                Profile
+                {nickname}
               </NavLink>
               <NavLink className="nav-item nav-link" to="/logout">
                 Logout

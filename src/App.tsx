@@ -3,6 +3,8 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import auth from './services/authService';
+import { getnickname } from './services/userService';
+import { toCapitalCase } from './utils/helpers';
 
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
@@ -23,22 +25,29 @@ import PlayGame from './components/pages/playGame';
 interface AppState {
   [key: string]: any;
 }
+
 class App extends Component {
   state: AppState = {
-    user: undefined
-  }
-  componentDidMount() {
-    const user = auth.getCurrentUser();
-    this.setState({ user });
+    userId: undefined,
+    nickname: '',
+  };
+  async componentDidMount() {
+    const userId = auth.getCurrentUser();
+    let nickname = '';
+    if (userId) {
+      const user = await getnickname(userId._id);
+      nickname = toCapitalCase(user.data);
+    }
+    this.setState({ userId, nickname });
   }
 
   render() {
-    const { user } = this.state;
+    const { userId, nickname } = this.state;
 
     return (
       <React.Fragment>
         <ToastContainer />
-        <NavBar user={user} />
+        <NavBar user={userId} nickname={nickname} />
         <main className="container">
           <Switch>
             <Route path="/not-found" component={NotFound} />
@@ -50,7 +59,7 @@ class App extends Component {
               path="/games/againstplayer"
               render={(props) => <CreateGame {...props} opponent={'player'} />}
             />
-            <ProtectedRoute path='/games/play/:id' component={PlayGame} />
+            <ProtectedRoute path="/games/play/:id" component={PlayGame} />
             <ProtectedRoute path="/games" component={Games} />
             <ProtectedRoute path="/history" component={History} />
             <Route path="/login" component={LoginForm} />

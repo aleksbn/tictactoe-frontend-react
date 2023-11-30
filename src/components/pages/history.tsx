@@ -4,6 +4,7 @@ import { GetGame } from '../../models/dto/getGame';
 import { GetGameHistory } from '../../models/dto/getGameHistory';
 import { Move } from '../../models/entity/move';
 import { gethistory } from '../../services/gameService';
+import { toCapitalCase } from '../../utils/helpers';
 import Select from '../common/select';
 import Table from '../common/table';
 
@@ -39,7 +40,7 @@ class History extends Component {
       );
     });
 
-    const columns = ['Player', 'Move'];
+    const columns = ['Player', 'Move coordinates'];
     let movesToDisplayInTable = [];
     const gameId = selectedGameId;
     if (gameId) {
@@ -50,11 +51,14 @@ class History extends Component {
       const players = [selectedGame.player1, selectedGame.player2];
       movesToDisplayInTable = moves.map((m: Move) => {
         return [
-          players.filter((p) => p.id === m.playerId)[0].nickname,
+          toCapitalCase(players.filter((p) => p.id === m.playerId)[0].nickname),
           `Coords: ${m.xCoord} - ${m.yCoord}`,
         ];
       });
-      winnerName = players[0].id === selectedGame.winnerId ? players[0].nickname : players[1].nickname;
+      winnerName =
+        players[0].id === selectedGame.winner
+          ? toCapitalCase(players[0].nickname)
+          : toCapitalCase(players[1].nickname);
     }
 
     return (
@@ -75,7 +79,9 @@ class History extends Component {
             <div className="col-4"></div>
           </div>
         )}
-        {this.state.selectedGameId && <h3>...and the winner is {winnerName}</h3>}
+        {this.state.selectedGameId && (
+          <h3>...and the winner is {winnerName}</h3>
+        )}
       </React.Fragment>
     );
   }

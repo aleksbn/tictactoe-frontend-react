@@ -4,6 +4,8 @@ import GameContainer from '../game/gameContainer';
 import { joingame } from '../../services/gameService';
 import ErrorComponent from '../common/error';
 import { getnickname } from '../../services/userService';
+import { toCapitalCase } from '../../utils/helpers';
+import { socketServer } from '../../servers/socketServer';
 
 interface MatchParams {
   id: string;
@@ -15,25 +17,23 @@ class PlayGame extends React.Component<PlayGameProps> {
   state = {
     data: {
       winnerId: '',
+      _id: '',
     },
     error: null,
-    gameFinished: false,
-    winner: ''
+    winner: '',
+    gameStatus: 'waiting',
   };
 
-  handlePlay = async (winnerId: string) => {
-    console.log(winnerId);
-    if (winnerId) {
-      const data = { ...this.state.data };
-      data.winnerId = winnerId;
-      const winner = (await getnickname(winnerId)).data;
-      this.setState({ data, gameFinished: true, winner });
-    } else this.loadData();
+  handlePlay = async (data: any) => {
+    socketServer.emit('move', data);
+    this.loadData();
   };
 
   async loadData() {
+    const { id } = this.props.match.params;
     try {
-      const result: any = await joingame(this.props.match.params.id);
+      const result: any = await joingame(id);
+      socketServer.emit('join', result.data);
       this.setState({ data: result.data });
       if (this.state.data.winnerId) this.setState({ gameFinished: true });
     } catch (ex: any) {
@@ -60,27 +60,55 @@ class PlayGame extends React.Component<PlayGameProps> {
   }
 
   async componentDidMount() {
-    this.loadData();
+    await this.loadData();
+
+    socketServer.on('playerJoined', (data) => {
+      this.setState({ gameStatus: data });
+    });
+
+    socketServer.on('playerLeft', (data) => {
+      this.setState({ gameStatus: data });
+    });
+
+    socketServer.on('gamefinished', async (data) => {
+      const winner = (await getnickname(data.winnerId)).data;
+      this.setState({ data, gameStatus: 'finished', winner });
+    });
+
+    socketServer.on('next', (data) => {
+      this.setState({ data });
+    });
+  }
+
+  async componentWillUnmount() {
+    socketServer.emit('leave', this.state.data._id);
   }
 
   render(): ReactNode {
-    const { data, error, gameFinished, winner } = this.state;
-
+    const { data, error, winner, gameStatus } = this.state;
     return (
       <React.Fragment>
-        {Object.keys(data).length > 0 &&
-          data.winnerId !== '' &&
-          !gameFinished && (
-            <div style={{ textAlign: 'center' }}>
-              <h1>Welcome to the game!</h1>
-              <GameContainer data={data} onPlay={this.handlePlay} />
-            </div>
-          )}
-        {Object.keys(data).length === 0 && !!error && !gameFinished && (
-          <ErrorComponent error={error} />
+        {gameStatus === 'ongoing' && (
+          <div>
+            {Object.keys(data).length > 0 && data.winnerId !== '' && (
+              <div style={{ textAlign: 'center' }}>
+                <h1>Welcome to the game!</h1>
+                <GameContainer data={data} onPlay={this.handlePlay} />
+              </div>
+            )}
+            {Object.keys(data).length === 0 && !!error && (
+              <ErrorComponent error={error} />
+            )}
+          </div>
         )}
-        {data.winnerId && gameFinished && (
-          <h1>And we have a winner! It's {winner}</h1>
+        {gameStatus === 'waiting' && (
+          <h1>Waiting for another player to join...</h1>
+        )}
+        {gameStatus === 'left' && (
+          <h1>Your opponent left. You cannot finish the game alone.</h1>
+        )}
+        {gameStatus === 'finished' && (
+          <h1>And we have a winner! It's {toCapitalCase(winner)}!</h1>
         )}
       </React.Fragment>
     );

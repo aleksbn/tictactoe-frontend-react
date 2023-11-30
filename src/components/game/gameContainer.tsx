@@ -33,8 +33,16 @@ class GameContainer extends React.Component<
   };
 
   async componentDidMount() {
+    console.log(this.props.data);
     const { data } = this.props;
     this.setState({ data });
+  }
+
+  async componentDidUpdate(prevProps: GameContainerProps) {
+    if (prevProps.data !== this.props.data) {
+      const { data } = this.props;
+      this.setState({ data });
+    }
   }
 
   async makeAMove(coords: string) {
@@ -48,8 +56,7 @@ class GameContainer extends React.Component<
       );
       delete result.data.__v;
       this.setState({ data: result.data });
-      this.props.onPlay(result.data.winnerId);
-      // Now, I should inform the other player that the move is played
+      this.props.onPlay(result.data);
     } catch (ex) {
       console.log(ex);
     }
