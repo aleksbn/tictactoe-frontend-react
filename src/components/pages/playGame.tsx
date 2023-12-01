@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import GameContainer from '../game/gameContainer';
-import { joingame } from '../../services/gameService';
+import { joingame, getgame } from '../../services/gameService';
 import ErrorComponent from '../common/error';
 import { getnickname } from '../../services/userService';
 import { toCapitalCase } from '../../utils/helpers';
@@ -24,39 +24,64 @@ class PlayGame extends React.Component<PlayGameProps> {
     gameStatus: 'waiting',
   };
 
-  handlePlay = async (data: any) => {
-    socketServer.emit('move', data);
-    this.loadData();
+  handlePlay = async (data: any, type: string) => {
+    if (type === 'data') socketServer.emit('move', data);
+    else {
+      const error = this.generateError(data);
+      this.setState({ error });
+    }
+  };
+
+  handleClose = () => {
+    if (
+      (this.state.error as any).errorCode !== '400' &&
+      (this.state.error as any).errorCode !== '405'
+    )
+      this.props.history.replace('/games');
+    this.setState({ error: null });
   };
 
   async loadData() {
     const { id } = this.props.match.params;
     try {
-      const result: any = await joingame(id);
-      socketServer.emit('join', result.data);
+      let result = await getgame(id);
+      if (this.state.gameStatus !== 'finished') {
+        result = await joingame(id);
+        socketServer.emit('join', result.data);
+      }
       this.setState({ data: result.data });
-      if (this.state.data.winnerId) this.setState({ gameFinished: true });
     } catch (ex: any) {
       this.setState({ data: {} });
-      const wordsFromErrorMessage = ex.toString().split(' ');
-      const errorCode = wordsFromErrorMessage[wordsFromErrorMessage.length - 1];
-      let message = '';
-      switch (errorCode) {
-        case '403':
-          message = 'That game already has all players and you cannot join.';
-          break;
-        case '401':
-          message = 'That game has already been done.';
-          break;
-        case '404':
-          message =
-            'That game does not exist. Try joining another, or creating one!';
-          break;
-        default:
-          message = 'An unknown error';
-      }
-      this.setState({ error: { code: errorCode, message: message } });
+      this.setState({ error: this.generateError(ex) });
     }
+  }
+
+  generateError(error: any) {
+    const wordsFromErrorMessage = error.toString().split(' ');
+    const errorCode = wordsFromErrorMessage[wordsFromErrorMessage.length - 1];
+    let message = '';
+    switch (errorCode) {
+      case '400':
+        message = 'That move has already been played. Choose another one.';
+        break;
+      case '401':
+        message = 'That game has already been done.';
+        break;
+      case '403':
+        message = 'That game already has all players and you cannot join.';
+        break;
+      case '404':
+        message =
+          'That game does not exist. Try joining another, or creating one!';
+        break;
+      case '405':
+        message =
+          "It's not your turn! Wait for the other player to make a move.";
+        break;
+      default:
+        message = 'An unknown error';
+    }
+    return { errorCode, message };
   }
 
   async componentDidMount() {
@@ -67,11 +92,17 @@ class PlayGame extends React.Component<PlayGameProps> {
     });
 
     socketServer.on('playerLeft', (data) => {
-      this.setState({ gameStatus: data });
+      if (this.state.gameStatus !== 'finished')
+        this.setState({ gameStatus: data });
     });
 
     socketServer.on('gamefinished', async (data) => {
-      const winner = (await getnickname(data.winnerId)).data;
+      const winner =
+        data.winnerId === 'Draw'
+          ? 'Draw'
+          : data.winnerId === 'PC'
+          ? 'PC'
+          : (await getnickname(data.winnerId)).data;
       this.setState({ data, gameStatus: 'finished', winner });
     });
 
@@ -88,27 +119,37 @@ class PlayGame extends React.Component<PlayGameProps> {
     const { data, error, winner, gameStatus } = this.state;
     return (
       <React.Fragment>
-        {gameStatus === 'ongoing' && (
-          <div>
-            {Object.keys(data).length > 0 && data.winnerId !== '' && (
-              <div style={{ textAlign: 'center' }}>
-                <h1>Welcome to the game!</h1>
-                <GameContainer data={data} onPlay={this.handlePlay} />
-              </div>
-            )}
-            {Object.keys(data).length === 0 && !!error && (
-              <ErrorComponent error={error} />
-            )}
-          </div>
+        {error && <ErrorComponent onClose={this.handleClose} error={error} />}
+        {gameStatus !== 'left' &&
+          gameStatus !== 'waiting' &&
+          (!error ||
+            ((error as { errorCode: string; message: string }).errorCode !==
+              '401' &&
+              (error as { errorCode: string; message: string }).errorCode !==
+                '405')) && (
+            <div>
+              {Object.keys(data).length > 0 && data.winnerId !== '' && (
+                <div style={{ textAlign: 'center' }}>
+                  <h1>Play the game!</h1>
+                  <GameContainer data={data} onPlay={this.handlePlay} />
+                </div>
+              )}
+            </div>
+          )}
+        {gameStatus === 'waiting' && !error && (
+          <React.Fragment>
+            <h1>Game ID: {data._id}</h1>
+            <h1>Waiting for another player to join...</h1>
+          </React.Fragment>
         )}
-        {gameStatus === 'waiting' && (
-          <h1>Waiting for another player to join...</h1>
-        )}
-        {gameStatus === 'left' && (
+        {gameStatus === 'left' && !error && (
           <h1>Your opponent left. You cannot finish the game alone.</h1>
         )}
-        {gameStatus === 'finished' && (
+        {gameStatus === 'finished' && !error && winner !== 'Draw' && (
           <h1>And we have a winner! It's {toCapitalCase(winner)}!</h1>
+        )}
+        {gameStatus === 'finished' && !error && winner === 'Draw' && (
+          <h1>No winner this time, it's a draw.</h1>
         )}
       </React.Fragment>
     );

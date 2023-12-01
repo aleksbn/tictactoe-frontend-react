@@ -16,7 +16,11 @@ export async function creategame(isAgainstPc: boolean) {
 }
 
 export async function joingame(id: string) {
-    return await http.get(`${gamesEndpoint}/join/${id}`);
+  return await http.get(`${gamesEndpoint}/join/${id}`);
+}
+
+export async function getgame(id: string) {
+  return await http.get(`${gamesEndpoint}/${id}`);
 }
 
 export async function makeamove(gameId: string, move: CreateMove) {

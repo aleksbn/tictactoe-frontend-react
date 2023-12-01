@@ -1,9 +1,15 @@
 table {
   align-self: center;
   width: 50%;
+  margin: 5px;
 }
 
-td {
+.tableHeader {
+  border: 2px solid black;
+  font-size: 2em;
+}
+
+.tableCell {
   position: relative;
   border: 2px solid black;
   width: 33.33%;

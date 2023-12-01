@@ -9,7 +9,7 @@ interface TableProps {
 
 const Table: React.FC<TableProps> = ({ columns, data }) => {
   return (
-    <table className="table">
+    <table className="table table-striped">
       <TableHeader columns={columns} />
       <TableBody data={data} />
     </table>

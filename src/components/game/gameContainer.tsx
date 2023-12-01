@@ -33,7 +33,6 @@ class GameContainer extends React.Component<
   };
 
   async componentDidMount() {
-    console.log(this.props.data);
     const { data } = this.props;
     this.setState({ data });
   }
@@ -56,9 +55,9 @@ class GameContainer extends React.Component<
       );
       delete result.data.__v;
       this.setState({ data: result.data });
-      this.props.onPlay(result.data);
-    } catch (ex) {
-      console.log(ex);
+      this.props.onPlay(result.data, 'data');
+    } catch (ex: any) {
+      this.props.onPlay(ex, 'error');
     }
   }
 
@@ -162,7 +161,7 @@ class GameContainer extends React.Component<
   }
 
   returnLetter(moves: Move[], cellCoors: string, letters: Map<string, string>) {
-    if (moves.length === 0) return '';
+    if (moves.length === 0) return ' ';
     const x: number = +cellCoors[0];
     const y: number = +cellCoors[1];
     const move = moves.find((m) => m.xCoord === x && m.yCoord === y);

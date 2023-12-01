@@ -9,7 +9,9 @@ const TableHeader: React.FC<TableHeaderProps> = ({ columns }) => {
     <thead>
       <tr>
         {columns.map((column, index) => (
-          <th key={index}>{column}</th>
+          <th key={index}>
+            {column}
+          </th>
         ))}
       </tr>
     </thead>
