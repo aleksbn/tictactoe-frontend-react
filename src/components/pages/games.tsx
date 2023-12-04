@@ -63,18 +63,16 @@ class Games extends Form {
           <div className="col-3" />
         </div>
         <div className="row">
-            <div className="col-5"/>
-            <div className="col-2">
-                <h1 style={{textAlign: 'center'}}>OR</h1>
-            </div>
-            <div className="col-5"/>
+          <div className="col-5" />
+          <div className="col-2">
+            <h1 style={{ textAlign: 'center' }}>OR</h1>
+          </div>
+          <div className="col-5" />
         </div>
         <div className="row">
           <div className="col-3" />
           <div className="col-6">
-            <form>
-              {this.renderInput('gameId', 'Game ID')}
-            </form>
+            <form>{this.renderInput('gameId', 'Game ID')}</form>
           </div>
           <div className="col-3" />
         </div>

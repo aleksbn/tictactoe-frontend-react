@@ -4,9 +4,11 @@ import { GetGame } from '../../models/dto/getGame';
 import { GetGameHistory } from '../../models/dto/getGameHistory';
 import { Move } from '../../models/entity/move';
 import { gethistory } from '../../services/gameService';
+import { getMappedLetters, returnLetter } from '../../utils/gameHelpers';
 import { toCapitalCase } from '../../utils/helpers';
 import Select from '../common/select';
 import Table from '../common/table';
+import GameTableCell from './../game/gameTableCell';
 
 interface HistoryFormState extends FormState {
   selectedGameId: string;
@@ -29,6 +31,82 @@ class History extends Component {
     newState.selectedGameId = e.target.value;
     this.setState({ ...newState });
   };
+
+  generateSmallTable() {
+    const selectedGame = this.state.data.filter(
+      (g: GetGameHistory) => g.gameId === this.state.selectedGameId
+    )[0];
+    const letters = getMappedLetters(
+      selectedGame.player1.id,
+      selectedGame.player2.id
+    );
+    return (
+      <table style={{ width: '100%' }}>
+        <tbody>
+          <tr>
+            <GameTableCell
+              value={returnLetter(selectedGame.moves, '00', letters).letter}
+              styleClass={
+                returnLetter(selectedGame.moves, '00', letters).styleClass
+              }
+            ></GameTableCell>
+            <GameTableCell
+              value={returnLetter(selectedGame.moves, '01', letters).letter}
+              styleClass={
+                returnLetter(selectedGame.moves, '01', letters).styleClass
+              }
+            ></GameTableCell>
+            <GameTableCell
+              value={returnLetter(selectedGame.moves, '02', letters).letter}
+              styleClass={
+                returnLetter(selectedGame.moves, '02', letters).styleClass
+              }
+            ></GameTableCell>
+          </tr>
+          <tr>
+            <GameTableCell
+              value={returnLetter(selectedGame.moves, '10', letters).letter}
+              styleClass={
+                returnLetter(selectedGame.moves, '10', letters).styleClass
+              }
+            ></GameTableCell>
+            <GameTableCell
+              value={returnLetter(selectedGame.moves, '11', letters).letter}
+              styleClass={
+                returnLetter(selectedGame.moves, '11', letters).styleClass
+              }
+            ></GameTableCell>
+            <GameTableCell
+              value={returnLetter(selectedGame.moves, '12', letters).letter}
+              styleClass={
+                returnLetter(selectedGame.moves, '12', letters).styleClass
+              }
+            ></GameTableCell>
+          </tr>
+          <tr>
+            <GameTableCell
+              value={returnLetter(selectedGame.moves, '20', letters).letter}
+              styleClass={
+                returnLetter(selectedGame.moves, '20', letters).styleClass
+              }
+            ></GameTableCell>
+            <GameTableCell
+              value={returnLetter(selectedGame.moves, '21', letters).letter}
+              styleClass={
+                returnLetter(selectedGame.moves, '21', letters).styleClass
+              }
+            ></GameTableCell>
+            <GameTableCell
+              value={returnLetter(selectedGame.moves, '22', letters).letter}
+              styleClass={
+                returnLetter(selectedGame.moves, '22', letters).styleClass
+              }
+            ></GameTableCell>
+          </tr>
+        </tbody>
+      </table>
+    );
+  }
 
   render() {
     const { data, selectedGameId } = this.state;
@@ -58,7 +136,7 @@ class History extends Component {
       winnerName =
         players[0].id === selectedGame.winner
           ? toCapitalCase(players[0].nickname)
-          : players[0].id === selectedGame.winner
+          : players[1].id === selectedGame.winner
           ? toCapitalCase(players[1].nickname)
           : 'Draw';
     }
@@ -68,23 +146,29 @@ class History extends Component {
         <h1>Select the game you want to see</h1>
         <Select
           name="game"
-          label="Game"
+          label=""
           options={games}
           onChange={this.handleSelect}
         />
-        {this.state.selectedGameId && (
-          <div className="row">
-            <div className="col-8">
-              <h2 className="text-center" style={{margin: 15}}>Table data</h2>
-              <Table columns={columns} data={movesToDisplayInTable} />
+        {selectedGameId && (
+          <React.Fragment>
+            <div className="row">
+              <h2 className="text-center" style={{ margin: 15 }}>
+                List of moves
+              </h2>
             </div>
-            <div className="col-4"></div>
-          </div>
+            <div className="row">
+              <div className="col-7">
+                <Table columns={columns} data={movesToDisplayInTable} />
+              </div>
+              <div className="col-5">{this.generateSmallTable()}</div>
+            </div>
+          </React.Fragment>
         )}
-        {this.state.selectedGameId && winnerName !== "Draw" && (
+        {selectedGameId && winnerName !== 'Draw' && (
           <h3>...and the winner is {winnerName}</h3>
         )}
-        {this.state.selectedGameId && winnerName === "Draw" && (
+        {selectedGameId && winnerName === 'Draw' && (
           <h3>It was a draw. No winner.</h3>
         )}
       </React.Fragment>

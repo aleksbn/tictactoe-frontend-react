@@ -6,6 +6,7 @@ import ErrorComponent from '../common/error';
 import { getnickname } from '../../services/userService';
 import { toCapitalCase } from '../../utils/helpers';
 import { socketServer } from '../../servers/socketServer';
+import DialogComponent from './../common/dialog';
 
 interface MatchParams {
   id: string;
@@ -22,23 +23,33 @@ class PlayGame extends React.Component<PlayGameProps> {
     error: null,
     winner: '',
     gameStatus: 'waiting',
+    displayDialog: true,
   };
 
   handlePlay = async (data: any, type: string) => {
     if (type === 'data') socketServer.emit('move', data);
     else {
       const error = this.generateError(data);
+      if (this.state.gameStatus === 'finished') {
+        error.errorCode = '401';
+        error.message = 'That game has already been finished.';
+      }
       this.setState({ error });
     }
   };
 
-  handleClose = () => {
+  handleErrorClose = () => {
     if (
       (this.state.error as any).errorCode !== '400' &&
       (this.state.error as any).errorCode !== '405'
     )
       this.props.history.replace('/games');
     this.setState({ error: null });
+  };
+
+  handleDialogCLose = () => {
+    const displayDialog = false;
+    this.setState({ displayDialog });
   };
 
   async loadData() {
@@ -65,10 +76,10 @@ class PlayGame extends React.Component<PlayGameProps> {
         message = 'That move has already been played. Choose another one.';
         break;
       case '401':
-        message = 'That game has already been done.';
+        message = 'That game has already been finished.';
         break;
       case '403':
-        message = 'That game already has all players and you cannot join.';
+        message = 'That game already has all players and you cannot play.';
         break;
       case '404':
         message =
@@ -85,7 +96,7 @@ class PlayGame extends React.Component<PlayGameProps> {
   }
 
   async componentDidMount() {
-    await this.loadData();
+    if (this.state.gameStatus !== 'finished') await this.loadData();
 
     socketServer.on('playerJoined', (data) => {
       this.setState({ gameStatus: data });
@@ -116,10 +127,12 @@ class PlayGame extends React.Component<PlayGameProps> {
   }
 
   render(): ReactNode {
-    const { data, error, winner, gameStatus } = this.state;
+    const { data, error, winner, gameStatus, displayDialog } = this.state;
     return (
       <React.Fragment>
-        {error && <ErrorComponent onClose={this.handleClose} error={error} />}
+        {error && (
+          <ErrorComponent onClose={this.handleErrorClose} error={error} />
+        )}
         {gameStatus !== 'left' &&
           gameStatus !== 'waiting' &&
           (!error ||
@@ -145,12 +158,26 @@ class PlayGame extends React.Component<PlayGameProps> {
         {gameStatus === 'left' && !error && (
           <h1>Your opponent left. You cannot finish the game alone.</h1>
         )}
-        {gameStatus === 'finished' && !error && winner !== 'Draw' && (
-          <h1>And we have a winner! It's {toCapitalCase(winner)}!</h1>
-        )}
-        {gameStatus === 'finished' && !error && winner === 'Draw' && (
-          <h1>No winner this time, it's a draw.</h1>
-        )}
+        {gameStatus === 'finished' &&
+          !error &&
+          winner !== 'Draw' &&
+          displayDialog && (
+            <DialogComponent
+              title={'We have a winner!'}
+              message={`It's ${toCapitalCase(winner)}!`}
+              onClose={this.handleDialogCLose}
+            />
+          )}
+        {gameStatus === 'finished' &&
+          !error &&
+          winner === 'Draw' &&
+          displayDialog && (
+            <DialogComponent
+              title={'Winner could not be determined.'}
+              message={`It's a draw`}
+              onClose={this.handleDialogCLose}
+            />
+          )}
       </React.Fragment>
     );
   }

@@ -1,4 +1,4 @@
-import React, { Component, ChangeEvent, FormEvent } from 'react';
+import { Component, ChangeEvent, FormEvent } from 'react';
 import Select from './select';
 import Input from './input';
 import { FormState } from '../../models/common';
@@ -86,13 +86,14 @@ class Form extends Component<{}, FormState> {
     );
   }
 
-  renderInput(name: string, label: string, type = 'text') {
+  renderInput(name: string, label: string, type = 'text', disabled = false) {
     const { data, errors } = this.state;
 
     return (
       <Input
         type={type}
         name={name}
+        disabled={disabled}
         value={data[name] || ''}
         label={label}
         onChange={this.handleChange}

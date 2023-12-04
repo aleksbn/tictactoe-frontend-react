@@ -13,10 +13,9 @@ interface ErrorResponse {
   [key: string]: string;
 }
 
-
 interface FormState {
   data: { [key: string]: any };
-  errors: ErrorResponse
+  errors: ErrorResponse;
 }
 
 export type { Option, FormFieldProps, ErrorResponse, FormState };
