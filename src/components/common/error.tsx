@@ -1,6 +1,7 @@
 import React from 'react';
-import '../../style/errorStyle.css';
+import '../../style/containerStyle.css';
 import Button from './button';
+
 interface ErrorComponentProps {
   error: {
     code: string;
@@ -25,14 +26,24 @@ class ErrorComponent extends React.Component<ErrorComponentProps> {
   render() {
     const { error } = this.state;
     return (
-      <div className='errorBackDrop' onClick={this.props.onClose}>
-        <div className="errorContainer">
-          <h1 style={{textAlign: 'center'}}>There was an error!</h1>
-          <p className='errorCode'>Status code: <span>{error.errorCode}</span></p>
-          <p className='errorMessage'><span>{error.message}</span></p>
-          <Button name="errorBtn" label="Close" onClick={this.props.onClose} />
+      <React.Fragment>
+        <div className="backdrop" onClick={this.props.onClose}></div>
+        <div className="containerStyle">
+          <h1 style={{ textAlign: 'center' }}>There was an error!</h1>
+          <p className="errorCode">
+            Status code: <span>{error.errorCode}</span>
+          </p>
+          <p className="message">
+            <span>{error.message}</span>
+          </p>
+          <Button
+            style={{ backgroundColor: 'red', width: '100%', padding: '25px' }}
+            name="errorBtn"
+            label="Close"
+            onClick={this.props.onClose}
+          />
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

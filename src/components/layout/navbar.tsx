@@ -1,63 +1,54 @@
-import { Link, NavLink } from 'react-router-dom';
 import React, { FC } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import { Navbar, Nav } from 'react-bootstrap';
 
 interface NavBarProps {
-  user: any,
-  nickname: string
+  user: any;
+  nickname: string;
 }
 
 const NavBar: FC<NavBarProps> = ({ user, nickname }) => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <Link className="navbar-brand" to="/">
+    <Navbar bg="primary" expand="lg" style={{ marginBottom: 25 }}>
+      <Navbar.Brand as={Link} to="/" className="text-light">
         Tic-tac-toe
-      </Link>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNavAltMarkup"
-        aria-controls="navbarNavAltMarkup"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon" />
-      </button>
-      <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div className="navbar-nav">
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="navbarNavAltMarkup" />
+      <Navbar.Collapse id="navbarNavAltMarkup">
+        <Nav className="mr-auto">
           {user && (
             <React.Fragment>
-              <NavLink className="nav-item nav-link" to="/games">
+              <Nav.Link as={NavLink} className="text-light" to="/games">
                 Games
-              </NavLink>
-              <NavLink className="nav-item nav-link" to="/history">
+              </Nav.Link>
+              <Nav.Link as={NavLink} className="text-light" to="/history">
                 History
-              </NavLink>
+              </Nav.Link>
             </React.Fragment>
           )}
           {!user && (
             <React.Fragment>
-              <NavLink className="nav-item nav-link" to="/login">
+              <Nav.Link as={NavLink} className="text-light" to="/login">
                 Login
-              </NavLink>
-              <NavLink className="nav-item nav-link" to="/register">
+              </Nav.Link>
+              <Nav.Link as={NavLink} className="text-light" to="/register">
                 Register
-              </NavLink>
+              </Nav.Link>
             </React.Fragment>
           )}
           {user && (
             <React.Fragment>
-              <NavLink className="nav-item nav-link" to="/profile">
-                {nickname}
-              </NavLink>
-              <NavLink className="nav-item nav-link" to="/logout">
+              <Nav.Link as={NavLink} className="text-light" to="/profile">
+                {nickname} <i className="fa fa-key" aria-hidden="true"></i>
+              </Nav.Link>
+              <Nav.Link as={NavLink} className="text-light" to="/logout">
                 Logout
-              </NavLink>
+              </Nav.Link>
             </React.Fragment>
           )}
-        </div>
-      </div>
-    </nav>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
 

@@ -6,6 +6,8 @@ import auth from './services/authService';
 import { getnickname } from './services/userService';
 import { toCapitalCase } from './utils/helpers';
 
+import 'jquery';
+import 'popper.js';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 

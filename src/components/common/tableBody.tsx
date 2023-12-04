@@ -13,8 +13,8 @@ class TableBody extends React.Component<TableBodyProps> {
         {data.map((item: string[], item_index: number) => (
           <tr key={item_index}>
             {item.map((value: string, value_index: number) => (
-                <td key={value_index}>{value}</td>))
-            }
+              <td key={value_index}>{value}</td>
+            ))}
           </tr>
         ))}
       </tbody>

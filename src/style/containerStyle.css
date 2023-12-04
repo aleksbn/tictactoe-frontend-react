@@ -1,9 +1,10 @@
 .errorCode {
-    text-align: center;
-    font-size: 1.5em;
+  text-align: center;
+  font-size: 1.5em;
+  color: red;
 }
 
-.errorContainer {
+.containerStyle {
   position: fixed;
   top: 10vh;
   left: 10%;
@@ -18,7 +19,7 @@
   background-color: cyan;
 }
 
-.errorBackDrop {
+.backdrop {
   position: fixed;
   top: 0;
   left: 0;
@@ -28,7 +29,7 @@
   z-index: 10;
 }
 
-.errorMessage {
-    text-align: center;
-    font-size: 1.5em;
+.message {
+  text-align: center;
+  font-size: 1.5em;
 }

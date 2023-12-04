@@ -1,4 +1,3 @@
-import React from 'react';
 //@ts-ignore
 import Joi from 'joi-browser';
 import Form from '../common/form';
@@ -64,7 +63,6 @@ class RegisterForm extends Form {
         );
       }
       auth.loginWithJwt(response.headers['x-auth-token']);
-      console.log(response);
       window.location.href = '/';
     } catch (ex: any) {
       if (ex.response && ex.response.status === 400) {
@@ -82,7 +80,8 @@ class RegisterForm extends Form {
       <div>
         <h1>{isNew ? 'Register a new user' : 'Edit your data'}</h1>
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput('username', 'Username', 'email')}
+          {isNew && this.renderInput('username', 'Username', 'email')}
+          {!isNew && this.renderInput('username', 'Username', 'email', true)}
           {this.renderInput('password', 'Password', 'password')}
           {this.renderInput('nickname', 'Nickname')}
           {this.renderButton(isNew ? 'Register' : 'Edit')}
