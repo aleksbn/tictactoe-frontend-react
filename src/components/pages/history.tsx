@@ -58,7 +58,9 @@ class History extends Component {
       winnerName =
         players[0].id === selectedGame.winner
           ? toCapitalCase(players[0].nickname)
-          : toCapitalCase(players[1].nickname);
+          : players[0].id === selectedGame.winner
+          ? toCapitalCase(players[1].nickname)
+          : 'Draw';
     }
 
     return (
@@ -73,14 +75,17 @@ class History extends Component {
         {this.state.selectedGameId && (
           <div className="row">
             <div className="col-8">
-              <h2 className="text-center">Table data</h2>
+              <h2 className="text-center" style={{margin: 15}}>Table data</h2>
               <Table columns={columns} data={movesToDisplayInTable} />
             </div>
             <div className="col-4"></div>
           </div>
         )}
-        {this.state.selectedGameId && (
+        {this.state.selectedGameId && winnerName !== "Draw" && (
           <h3>...and the winner is {winnerName}</h3>
+        )}
+        {this.state.selectedGameId && winnerName === "Draw" && (
+          <h3>It was a draw. No winner.</h3>
         )}
       </React.Fragment>
     );

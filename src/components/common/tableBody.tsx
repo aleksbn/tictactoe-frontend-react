@@ -11,7 +11,7 @@ class TableBody extends React.Component<TableBodyProps> {
     return (
       <tbody>
         {data.map((item: string[], item_index: number) => (
-          <tr key={item_index} style={item_index % 2 === 0 ? {backgroundColor: 'lightyellow'} : {backgroundColor: 'cyan'}}>
+          <tr key={item_index}>
             {item.map((value: string, value_index: number) => (
                 <td key={value_index}>{value}</td>))
             }
