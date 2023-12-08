@@ -30,22 +30,28 @@ By default, most of the projects on github are stored without node_modules folde
 ```
 npm install
 ```
-You should repeat the process of libraries installation for frontend part too.
+And that's it, the required libraries are downloaded.
 # Running the app
-Simple, just type in 
+Before starting the backend, you need mongodb to be running. Open up new console (location is irrelevant) and type in
+```
+mongod
+```
+That's it. Now, head back to the console window where you started libraries installation and type in 
 ```
 npm start
 ```
-and voila! The app is running on address [http://localhost:3900/](http://localhost:3900/)
+and voila! The app is running on address [http://localhost:3000/](http://localhost:3000/)
 
-# Frontend start, install and running the app
-Download the code from this project for the frontend app. The steps are pretty much the same as with backend, and there's no major differences.
+# Backend start, install and running the app
+Head to the [https://github.com/aleksbn/tictactoe-backend-node.js](https://github.com/aleksbn/tictactoe-backend-node.js) and download the frontend app. Repeat the stepps of downloading code, isntalling libraries and starting the app. Of course, mongodb is already started and there's no need for doing it again.
 
 # Architecture considerations
 Project is using 3 layers:
 1. MongoDB (database)
 2. Node.js (backend)
 3. React (frontend)
+
+Game is using JWT token as a form of authentication. It has auth middleware that controlls every access to the backend endpoints. Typescript is making sure that all the data are strongly typed and sockets are providing the players with live communication. Endpoints access is supported by router created by the Express library.
 
 # Node.js backend libraries
 List of used libraries is following:
