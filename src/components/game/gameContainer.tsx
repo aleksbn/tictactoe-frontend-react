@@ -4,6 +4,7 @@ import { CreateMove } from '../../models/dto/createMove';
 import { makeamove } from '../../services/gameService';
 import auth from '../../services/authService';
 import GameBoard from './gameBoard';
+import '../../style/gameContainerStyle.css';
 
 interface GameContainerProps {
   data: any;
@@ -68,7 +69,7 @@ class GameContainer extends React.Component<
           <div className="col-2" />
           <div className="col-8">
             <center>
-              <table>
+              <table className={'tableBorder'}>
                 <GameBoard data={data} makeAMove={this.makeAMove} />
               </table>
             </center>
