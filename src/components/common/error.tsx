@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../style/containerStyle.css';
 import Button from './button';
 
@@ -7,45 +7,39 @@ interface ErrorComponentProps {
     code: string;
     message: string;
   };
-  onClose: any;
+  onClose: () => void;
 }
 
-class ErrorComponent extends React.Component<ErrorComponentProps> {
-  state = {
-    error: {
-      errorCode: '',
-      message: '',
-    },
-  };
+const ErrorComponent: React.FC<ErrorComponentProps> = ({error, onClose}) => {
+  const [errorCode, setErrorCode] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
-  componentDidMount() {
-    const { error } = this.props;
-    this.setState({ error });
-  }
+  useEffect(() => {
+    setErrorCode(error.code);
+    setErrorMessage(error.message);
+  }, [error]);
 
-  render() {
-    const { error } = this.state;
     return (
       <React.Fragment>
-        <div className="backdrop" onClick={this.props.onClose}></div>
+        <div className="backdrop" onClick={onClose}></div>
         <div className="containerStyle">
           <h1 style={{ textAlign: 'center' }}>There was an error!</h1>
           <p className="errorCode">
-            Status code: <span>{error.errorCode}</span>
+            Status code: <span>{errorCode}</span>
           </p>
           <p className="message">
-            <span>{error.message}</span>
+            <span>{errorMessage}</span>
           </p>
           <Button
             style={{ backgroundColor: 'red', width: '100%', padding: '25px' }}
             name="errorBtn"
             label="Close"
-            onClick={this.props.onClose}
+            onClick={onClose}
           />
         </div>
       </React.Fragment>
     );
-  }
+
 }
 
 export default ErrorComponent;

@@ -1,8 +1,8 @@
-import React, { FC, InputHTMLAttributes } from 'react';
+import React, { FC } from 'react';
 import { FormFieldProps } from '../../models/common';
 
 interface InputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'name'>,
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name'>,
     FormFieldProps {}
 
 const Input: FC<InputProps> = ({ name, label, error, ...rest }) => {

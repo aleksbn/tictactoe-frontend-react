@@ -2,7 +2,8 @@ import { Component, ChangeEvent, FormEvent } from 'react';
 import Select from './select';
 import Input from './input';
 import { FormState } from '../../models/common';
-const Joi = require('joi-browser');
+//@ts-ignore
+import Joi from 'joi-browser';
 
 class Form extends Component<{}, FormState> {
   validate = () => {

@@ -2,7 +2,8 @@ import { ErrorResponse } from '../../models/common';
 import { LoginUser } from '../../models/dto/loginUser';
 import auth from '../../services/authService';
 import Form from '../common/form';
-const Joi = require('joi-browser');
+//@ts-ignore
+import Joi from 'joi-browser';
 
 class LoginForm extends Form {
   state = {

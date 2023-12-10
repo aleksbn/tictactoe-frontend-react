@@ -1,44 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../style/containerStyle.css';
 import Button from './button';
 
 interface DialogComponentProps {
   title: string;
   message: string;
-  onClose: any;
+  onClose: () => void;
 }
 
-class DialogComponent extends React.Component<DialogComponentProps> {
-  state = {
-    title: '',
-    message: '',
-  };
+const DialogComponent: React.FC<DialogComponentProps> = ({
+  title,
+  message,
+  onClose,
+}) => {
+  const [dialogTitle, setDialogTitle] = useState<string>('');
+  const [dialogMessage, setDialogMessage] = useState<string>('');
 
-  componentDidMount() {
-    const { title, message } = this.props;
-    this.setState({ title, message });
-  }
+  useEffect(() => {
+    setDialogTitle(title);
+    setDialogMessage(message);
+  }, [title, message]);
 
-  render() {
-    const { title, message } = this.state;
-    return (
-      <React.Fragment>
-        <div className="backdrop" onClick={this.props.onClose}></div>
-        <div className="containerStyle">
-          <h1 style={{ textAlign: 'center' }}>{title}</h1>
-          <p className="message">
-            <span>{message}</span>
-          </p>
-          <Button
-            style={{ width: '100%', padding: '25px' }}
-            name="dialogBtn"
-            label="Close"
-            onClick={this.props.onClose}
-          />
-        </div>
-      </React.Fragment>
-    );
-  }
-}
+  return (
+    <React.Fragment>
+      <div className="backdrop" onClick={onClose}></div>
+      <div className="containerStyle">
+        <h1 style={{ textAlign: 'center' }}>{dialogTitle}</h1>
+        <p className="message">
+          <span>{dialogMessage}</span>
+        </p>
+        <Button
+          style={{ width: '100%', padding: '25px' }}
+          name="dialogBtn"
+          label="Close"
+          onClick={onClose}
+        />
+      </div>
+    </React.Fragment>
+  );
+};
 
 export default DialogComponent;

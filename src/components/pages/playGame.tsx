@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import GameContainer from '../game/gameContainer';
 import { joingame, getgame } from '../../services/gameService';
@@ -14,60 +14,55 @@ interface MatchParams {
 
 interface PlayGameProps extends RouteComponentProps<MatchParams> {}
 
-class PlayGame extends React.Component<PlayGameProps> {
-  state = {
-    data: {
-      winnerId: '',
-      _id: '',
-    },
-    error: null,
-    winner: '',
-    gameStatus: 'waiting',
-    displayDialog: true,
-  };
+const PlayGame: React.FC<PlayGameProps> = ({ match, history }) => {
+  const [data, setData] = useState({
+    winnerId: '',
+    _id: '',
+  });
+  const [error, setError] = useState<any>(null);
+  const [winner, setWinner] = useState('');
+  const [gameStatus, setGameStatus] = useState('waiting');
+  const [displayDialog, setDisplayDialog] = useState(true);
 
-  handlePlay = async (data: any, type: string) => {
-    if (type === 'data') socketServer.emit('move', data);
+  const handlePlay = async (moveData: any, type: string) => {
+    if (type === 'data') socketServer.emit('move', moveData);
     else {
-      const error = this.generateError(data);
-      if (this.state.gameStatus === 'finished') {
-        error.errorCode = '401';
-        error.message = 'That game has already been finished.';
+      const generatedError = generateError(moveData);
+      if (gameStatus === 'finished') {
+        generatedError.errorCode = '401';
+        generatedError.message = 'That game has already been finished.';
       }
-      this.setState({ error });
+      setError(generatedError);
     }
   };
 
-  handleErrorClose = () => {
-    if (
-      (this.state.error as any).errorCode !== '400' &&
-      (this.state.error as any).errorCode !== '405'
-    )
-      this.props.history.replace('/games');
-    this.setState({ error: null });
+  const handleErrorClose = () => {
+    if (error?.errorCode !== '400' && error?.errorCode !== '405') {
+      history.replace('/games');
+    }
+    setError(null);
   };
 
-  handleDialogCLose = () => {
-    const displayDialog = false;
-    this.setState({ displayDialog });
+  const handleDialogClose = () => {
+    setDisplayDialog(false);
   };
 
-  async loadData() {
-    const { id } = this.props.match.params;
+  const loadData = async () => {
+    const { id } = match.params;
     try {
       let result = await getgame(id);
-      if (this.state.gameStatus !== 'finished') {
+      if (gameStatus !== 'finished') {
         result = await joingame(id);
         socketServer.emit('join', result.data);
       }
-      this.setState({ data: result.data });
+      setData(result.data);
     } catch (ex: any) {
-      this.setState({ data: {} });
-      this.setState({ error: this.generateError(ex) });
+      setData({ winnerId: '', _id: '' });
+      setError(generateError(ex));
     }
-  }
+  };
 
-  generateError(error: any) {
+  const generateError = (error: any) => {
     const wordsFromErrorMessage = error.toString().split(' ');
     const errorCode = wordsFromErrorMessage[wordsFromErrorMessage.length - 1];
     let message = '';
@@ -93,94 +88,91 @@ class PlayGame extends React.Component<PlayGameProps> {
         message = 'An unknown error';
     }
     return { errorCode, message };
-  }
+  };
 
-  async componentDidMount() {
-    if (this.state.gameStatus !== 'finished') await this.loadData();
+  useEffect(() => {
+    const fetchData = async () => {
+      if (gameStatus !== 'finished') await loadData();
 
-    socketServer.on('playerJoined', (data) => {
-      this.setState({ gameStatus: data });
-    });
+      socketServer.on('playerJoined', (data) => {
+        setGameStatus(data);
+      });
 
-    socketServer.on('playerLeft', (data) => {
-      if (this.state.gameStatus !== 'finished')
-        this.setState({ gameStatus: data });
-    });
+      socketServer.on('playerLeft', (data) => {
+        if (gameStatus !== 'finished') setGameStatus(data);
+      });
 
-    socketServer.on('gamefinished', async (data) => {
-      const winner =
-        data.winnerId === 'Draw'
-          ? 'Draw'
-          : data.winnerId === 'PC'
-          ? 'PC'
-          : (await getnickname(data.winnerId)).data;
-      this.setState({ data, gameStatus: 'finished', winner });
-    });
+      socketServer.on('gamefinished', async (data) => {
+        const gameWinner =
+          data.winnerId === 'Draw'
+            ? 'Draw'
+            : data.winnerId === 'PC'
+            ? 'PC'
+            : (await getnickname(data.winnerId)).data;
+        setData(data);
+        setGameStatus('finished');
+        setWinner(gameWinner);
+      });
 
-    socketServer.on('next', (data) => {
-      this.setState({ data });
-    });
-  }
+      socketServer.on('next', (data) => {
+        setData(data);
+      });
+    };
 
-  async componentWillUnmount() {
-    socketServer.emit('leave', this.state.data._id);
-  }
+    fetchData();
 
-  render(): ReactNode {
-    const { data, error, winner, gameStatus, displayDialog } = this.state;
-    return (
-      <React.Fragment>
-        {error && (
-          <ErrorComponent onClose={this.handleErrorClose} error={error} />
+    return () => {
+      socketServer.emit('leave', data._id);
+    };
+  }, [gameStatus, data._id]);
+
+  return (
+    <>
+      {error && <ErrorComponent onClose={handleErrorClose} error={error} />}
+      {gameStatus !== 'left' &&
+        gameStatus !== 'waiting' &&
+        (!error ||
+          (error?.errorCode !== '401' && error?.errorCode !== '405')) && (
+          <div>
+            {Object.keys(data).length > 0 && data.winnerId !== '' && (
+              <div style={{ textAlign: 'center' }}>
+                <h1>Play the game!</h1>
+                <GameContainer data={data} onPlay={handlePlay} />
+              </div>
+            )}
+          </div>
         )}
-        {gameStatus !== 'left' &&
-          gameStatus !== 'waiting' &&
-          (!error ||
-            ((error as { errorCode: string; message: string }).errorCode !==
-              '401' &&
-              (error as { errorCode: string; message: string }).errorCode !==
-                '405')) && (
-            <div>
-              {Object.keys(data).length > 0 && data.winnerId !== '' && (
-                <div style={{ textAlign: 'center' }}>
-                  <h1>Play the game!</h1>
-                  <GameContainer data={data} onPlay={this.handlePlay} />
-                </div>
-              )}
-            </div>
-          )}
-        {gameStatus === 'waiting' && !error && (
-          <React.Fragment>
-            <h1>Game ID: {data._id}</h1>
-            <h1>Waiting for another player to join...</h1>
-          </React.Fragment>
+      {gameStatus === 'waiting' && !error && (
+        <>
+          <h1>Game ID: {data._id}</h1>
+          <h1>Waiting for another player to join...</h1>
+        </>
+      )}
+      {gameStatus === 'left' && !error && (
+        <h1>Your opponent left. You cannot finish the game alone.</h1>
+      )}
+      {gameStatus === 'finished' &&
+        !error &&
+        winner !== 'Draw' &&
+        displayDialog && (
+          <DialogComponent
+            title={'We have a winner!'}
+            message={`It's ${toCapitalCase(winner)}!`}
+            onClose={handleDialogClose}
+          />
         )}
-        {gameStatus === 'left' && !error && (
-          <h1>Your opponent left. You cannot finish the game alone.</h1>
+      {gameStatus === 'finished' &&
+        !error &&
+        winner === 'Draw' &&
+        displayDialog && (
+          <DialogComponent
+            title={'Winner could not be determined.'}
+            message={`It's a draw`}
+            onClose={handleDialogClose}
+          />
         )}
-        {gameStatus === 'finished' &&
-          !error &&
-          winner !== 'Draw' &&
-          displayDialog && (
-            <DialogComponent
-              title={'We have a winner!'}
-              message={`It's ${toCapitalCase(winner)}!`}
-              onClose={this.handleDialogCLose}
-            />
-          )}
-        {gameStatus === 'finished' &&
-          !error &&
-          winner === 'Draw' &&
-          displayDialog && (
-            <DialogComponent
-              title={'Winner could not be determined.'}
-              message={`It's a draw`}
-              onClose={this.handleDialogCLose}
-            />
-          )}
-      </React.Fragment>
-    );
-  }
-}
+    </>
+  );
+};
 
 export default PlayGame;
