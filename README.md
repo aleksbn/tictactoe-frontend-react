@@ -10,7 +10,7 @@ Node.js is basically a javascript engine very similar to the regular browser one
 You also need mongodb as a backend database provider. Head to the [mongodb](https://www.mongodb.com/atlas), download atlas and install it on your machine. It should already have the required address in order to create database at the start.
 
 # Backend start
-Next, download the code provided on [this link](https://github.com/aleksbn/tictactoe-node), copy it to the location you would like it to be stationed and open up your console.
+Next, download the code provided on [this link](https://github.com/aleksbn/tictactoe-backend-node.js), copy it to the location you would like it to be stationed and open up your console.
 Go to the folder you copied the project to. In case you need to go a folder up, type:
 ```
 cd ..
@@ -40,13 +40,13 @@ In case you get an error stating the following: "mongod' is not recognized as an
 ```
 npm start
 ```
-and voila! The app is running on address [http://localhost:3000/](http://localhost:3000/)
+and voila! The app is running on address [http://localhost:3900/](http://localhost:3900/)
 
-# Backend start, install and running the app
-Head to the [https://github.com/aleksbn/tictactoe-backend-node.js](https://github.com/aleksbn/tictactoe-backend-node.js) and download the frontend app. Repeat the stepps of downloading code, isntalling libraries and starting the app. Of course, mongodb is already started and there's no need for doing it again.
+# Frontend start, install and running the app
+Download frontend app from this repo. Repeat the stepps of downloading code, isntalling libraries and starting the app. Of course, mongodb is already started and there's no need for doing it again.
 
 # Data seeding
-Now, if you want to generate some random data, you can use built-in function for that. Just open your postman to make a request, or go to your browser and type in the following address: http://localhost:3000/generate. At the end of the url, you need to add the number of players you want to generate, as well as the number of games per player. In example, if I want 5 players with 4 games per player, I would go (or make a request in postman) to http://localhost:3000/generate/5/4. If you're interested in using the data, just open mongodb compass, head to the tictactoe db and see user names you generated. Password for every player is nickname+"sifra". In example, for user alex, password is alexsifra.
+Now, if you want to generate some random data, you can use built-in function for that. Just open your postman to make a request, or go to your browser and type in the following address: http://localhost:3900/generate. At the end of the url, you need to add the number of players you want to generate, as well as the number of games per player. In example, if I want 5 players with 4 games per player, I would go (or make a request in postman) to http://localhost:3900/generate/5/4. If you're interested in using the data, just open mongodb compass, head to the tictactoe db and see user names you generated. Password for every player is nickname+"sifra". In example, for user alex, password is alexsifra.
 
 # Architecture considerations
 Project is using 3 layers:
