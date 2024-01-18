@@ -10,7 +10,7 @@ Node.js is basically a javascript engine very similar to the regular browser one
 You also need mongodb as a backend database provider. Head to the [mongodb](https://www.mongodb.com/atlas), download atlas and install it on your machine. It should already have the required address in order to create database at the start.
 
 # Backend start
-Next, download the code provided on [this link](https://github.com/aleksbn/tictactoe-backend-node.js), copy it to the location you would like it to be stationed and open up your console.
+Download the code provided on [this link](https://github.com/aleksbn/tictactoe-backend-node.js), copy it to the location you would like it to be stationed and open up your console.
 Go to the folder you copied the project to. In case you need to go a folder up, type:
 ```
 cd ..
@@ -36,7 +36,7 @@ Before starting the backend, you need mongodb to be running. Open up new console
 ```
 mongod
 ```
-In case you get an error stating the following: "mongod' is not recognized as an internal or external command, operable program or batch file", it means you must add local variable to your operative system. Here's the [info](https://stackoverflow.com/questions/51224959/mongo-is-not-recognized-as-an-internal-or-external-command-operable-program-o) on how do you do it on windows 10. I'm sure other operative systems follow similar steps. And that's it. Now, head back to the console window where you started libraries installation and type in 
+In case you get an error stating the following: "'mongod' is not recognized as an internal or external command, operable program or batch file", it means you must add local variable to your operative system. Here's the [info](https://stackoverflow.com/questions/51224959/mongo-is-not-recognized-as-an-internal-or-external-command-operable-program-o) on how do you do it on windows 10. I'm sure other operative systems follow similar steps. And that's it. Now, head back to the console window where you started libraries installation and type in 
 ```
 npm start
 ```
