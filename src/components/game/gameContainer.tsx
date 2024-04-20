@@ -48,10 +48,25 @@ class GameContainer extends React.Component<
 			const x = +coords[0];
 			const y = +coords[1];
 			const user: any = auth.getCurrentUser();
-			const result: any = await makeamove(
+			let result: any = await makeamove(
 				this.state.data._id,
 				new CreateMove(user._id, x, y)
 			);
+			delete result.data.__v;
+			this.setState({ data: result.data });
+			this.props.onPlay(result.data, "data");
+
+			if (
+				result.data.isAgainstPC === true &&
+				result.data.moves[result.data.moves.length - 1].playerId !== "PC" &&
+				!result.data.winnerId
+			) {
+				//delay for 2 seconds
+				result = await makeamove(
+					this.state.data._id,
+					new CreateMove("PC", -1, -1)
+				);
+			}
 			delete result.data.__v;
 			this.setState({ data: result.data });
 			this.props.onPlay(result.data, "data");
