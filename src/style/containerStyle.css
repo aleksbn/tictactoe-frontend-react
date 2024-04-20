@@ -1,35 +1,37 @@
 .errorCode {
-  text-align: center;
-  font-size: 1.5em;
-  color: red;
+	text-align: center;
+	font-size: 1.5em;
+	color: red;
 }
 
 .containerStyle {
-  position: fixed;
-  top: 10vh;
-  left: 10%;
-  width: 80%;
-  z-index: 100;
-  border-radius: 12px;
-  border: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  padding: 25px;
-  margin: 0;
-  overflow: auto;
-  background-color: cyan;
+	position: fixed;
+	top: 10vh;
+	left: 10%;
+	width: 80%;
+	z-index: 100;
+	border-radius: 12px;
+	border: none;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+	padding: 25px;
+	margin: 0;
+	overflow: auto;
+	background-color: cyan;
 }
 
 .backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
-  z-index: 10;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width: 100%;
+	background-color: rgba(0, 0, 0, 0.75);
+	z-index: 10;
+	backdrop-filter: blur(3px);
+	transition: all 0.3s;
 }
 
 .message {
-  text-align: center;
-  font-size: 1.5em;
+	text-align: center;
+	font-size: 1.5em;
 }

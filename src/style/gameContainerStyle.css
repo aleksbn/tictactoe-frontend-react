@@ -1,27 +1,79 @@
 table {
-  align-self: center;
-  width: 50%;
-  margin: 5px;
+	align-self: center;
+	width: 50%;
+	margin: 5px;
 }
 
-.tableHeader {
-  border: 2px solid black;
-  font-size: 2em;
+.gameTable {
+	border-radius: 50px;
+	background-color: cyan;
+	border-spacing: 0;
+	border-collapse: separate;
+	border: 1px solid gray;
+	overflow: hidden;
+}
+
+.historyGameTable {
+	border: 1px solid black;
 }
 
 .tableCell {
-  position: relative;
-  border: 2px solid black;
-  width: 33.33%;
-  text-align: center;
-  height: 150px;
-  overflow: hidden;
-  font-size: 2em;
-  line-height: 1;
+	position: relative;
+	width: 33.33%;
+	padding: 25px;
+	text-align: center;
+	font-size: 5em;
+	box-shadow: inset 1px 1px 15px #4d865b;
+	transition: all 0.2s;
 }
 
-.tableBorder {
-  border: 5px solid black;
-  border-radius: 5px;
-  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+.tableCell:hover {
+	background-color: #85e99e;
+	box-shadow: inset 2px 2px 15px #4d865b;
+}
+
+.highlightAsWining {
+	background-color: yellow;
+}
+
+.highlightAsPlayed {
+	background-color: #85e99e;
+}
+
+.gameTable th:not(:last-child),
+.gameTable td:not(:last-child) {
+	border-right: 1px solid gray;
+}
+
+.historyGameTable th:not(:last-child),
+.historyGameTable td:not(:last-child) {
+	border-right: 1px solid black;
+}
+
+.gameTable > thead > tr:not(:last-child) > th,
+.gameTable > thead > tr:not(:last-child) > td,
+.gameTable > tbody > tr:not(:last-child) > th,
+.gameTable > tbody > tr:not(:last-child) > td,
+.gameTable > tfoot > tr:not(:last-child) > th,
+.gameTable > tfoot > tr:not(:last-child) > td,
+.gameTable > tr:not(:last-child) > td,
+.gameTable > tr:not(:last-child) > th,
+.gameTable > thead:not(:last-child),
+.gameTable > tbody:not(:last-child),
+.gameTable > tfoot:not(:last-child) {
+	border-bottom: 1px solid gray;
+}
+
+.historyGameTable > thead > tr:not(:last-child) > th,
+.historyGameTable > thead > tr:not(:last-child) > td,
+.historyGameTable > tbody > tr:not(:last-child) > th,
+.historyGameTable > tbody > tr:not(:last-child) > td,
+.historyGameTable > tfoot > tr:not(:last-child) > th,
+.historyGameTable > tfoot > tr:not(:last-child) > td,
+.historyGameTable > tr:not(:last-child) > td,
+.historyGameTable > tr:not(:last-child) > th,
+.historyGameTable > thead:not(:last-child),
+.historyGameTable > tbody:not(:last-child),
+.historyGameTable > tfoot:not(:last-child) {
+	border-bottom: 1px solid black;
 }

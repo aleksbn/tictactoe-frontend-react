@@ -1,13 +1,21 @@
-import { FC } from 'react';
-import '../../style/tableCellStyle.css';
+import { FC } from "react";
+import "../../style/tableCellStyle.css";
 
 interface GameTableCellProps {
-  value: any;
-  styleClass: string
+	value: string | undefined;
+	styleClass: string;
 }
 
 const GameTableCell: FC<GameTableCellProps> = ({ value, styleClass }) => {
-  return <td className={`tableGameCell ${styleClass}`}>{value}</td>;
+	return (
+		<td
+			className={`tableHistoryCell ${
+				styleClass !== "highlightAsPlayed" ? styleClass : ""
+			}`}
+		>
+			{value}
+		</td>
+	);
 };
 
 export default GameTableCell;
