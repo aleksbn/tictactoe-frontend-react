@@ -1,6 +1,7 @@
 import { Move } from "./move";
 
 interface IGame {
+	_id?: string | null;
 	creatorId: string;
 	isAgainstPC: boolean;
 	opponentId?: string | null;
@@ -9,6 +10,7 @@ interface IGame {
 }
 
 class Game implements IGame {
+	_id?: string | null;
 	creatorId: string;
 	isAgainstPC: boolean;
 	opponentId?: string | null;

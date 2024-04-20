@@ -1,21 +1,44 @@
-interface Option {
-  _id: string;
-  name: string;
+interface IOption {
+	_id: string;
+	name: string;
 }
 
-interface FormFieldProps {
-  name: string;
-  label: string;
-  error?: string | null;
+interface IFormFieldProps {
+	name: string;
+	label: string;
+	error?: string | null;
 }
 
-interface ErrorResponse {
-  [key: string]: string;
+interface IErrorResponse {
+	[key: string]: string;
 }
 
-interface FormState {
-  data: { [key: string]: any };
-  errors: ErrorResponse;
+interface IFormState {
+	data: { [key: string]: any };
+	errors: IErrorResponse;
 }
 
-export type { Option, FormFieldProps, ErrorResponse, FormState };
+interface IErrorComponentProps {
+	error: IError;
+	onClose: () => void;
+}
+
+interface IError {
+	errorCode: string;
+	message: string;
+}
+
+interface IDialogComponentProps {
+	title: string;
+	message: string;
+	onClose: () => void;
+}
+
+export type {
+	IOption,
+	IFormFieldProps,
+	IErrorResponse,
+	IFormState,
+	IErrorComponentProps,
+	IDialogComponentProps,
+};

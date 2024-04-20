@@ -4,40 +4,20 @@ table {
 	margin: 5px;
 }
 
-.gameTable {
+.regularTable {
 	border-radius: 50px;
 	background-color: cyan;
 	border-spacing: 0;
 	border-collapse: separate;
-	border: 1px solid gray;
 	overflow: hidden;
+}
+
+.gameTable {
+	border: 1px solid gray;
 }
 
 .historyGameTable {
 	border: 1px solid black;
-}
-
-.tableCell {
-	position: relative;
-	width: 33.33%;
-	padding: 25px;
-	text-align: center;
-	font-size: 5em;
-	box-shadow: inset 1px 1px 15px #4d865b;
-	transition: all 0.2s;
-}
-
-.tableCell:hover {
-	background-color: #85e99e;
-	box-shadow: inset 2px 2px 15px #4d865b;
-}
-
-.highlightAsWining {
-	background-color: yellow;
-}
-
-.highlightAsPlayed {
-	background-color: #85e99e;
 }
 
 .gameTable th:not(:last-child),

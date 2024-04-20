@@ -3,3 +3,26 @@
 	text-align: center;
 	font-size: 1.5em;
 }
+
+.tableCell {
+	position: relative;
+	width: 33.33%;
+	padding: 25px;
+	text-align: center;
+	font-size: 5em;
+	box-shadow: inset 1px 1px 15px #4d865b;
+	transition: all 0.2s;
+}
+
+.tableCell:hover {
+	background-color: #85e99e;
+	box-shadow: inset 2px 2px 15px #4d865b;
+}
+
+.highlightAsWining {
+	background-color: yellow;
+}
+
+.highlightAsPlayed {
+	background-color: #85e99e;
+}

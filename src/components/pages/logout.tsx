@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
-import auth from '../../services/authService';
+import { useEffect } from "react";
+import auth from "../../services/authService";
 
 const Logout = () => {
-  useEffect(() => {
-    const handleLogout = async () => {
-      await auth.logout();
-      window.location.href = '/';
-    };
+	useEffect(() => {
+		const handleLogout = async () => {
+			auth.logout();
+			window.location.href = "/";
+		};
 
-    handleLogout();
-  }, []);
+		handleLogout();
+	}, []);
 
-  return null;
+	return null;
 };
 
 export default Logout;

@@ -1,20 +1,22 @@
 import { FC } from "react";
 import { Move } from "../../models/entity/move";
-import "../../style/gameContainerStyle.css";
+import "../../style/tableStyle.css";
+import "../../style/tableCellStyle.css";
 import { returnLetter } from "./../../utils/gameHelpers";
+import { IGame } from "../../models/entity/game";
 
 interface GameBoardProps {
-	data: any;
-	makeAMove: any;
+	data: IGame;
+	makeAMove: (move: string) => void;
 }
 
 const GameBoard: FC<GameBoardProps> = ({ data, makeAMove }) => {
-	const letters = new Map();
+	const letters = new Map<string, string>();
 	letters.set(data.creatorId, "X");
-	letters.set(data.opponentId, "O");
-	const moves = data.moves;
-	if (data._id !== "" && moves.length > 0) {
-		moves.sort((a: Move, b: Move) => {
+	letters.set(data.opponentId!, "O");
+	const moves = data.moves!;
+	if (data._id !== "" && moves!.length > 0) {
+		moves!.sort((a: Move, b: Move) => {
 			if (a.xCoord > b.xCoord) return 1;
 			if (a.yCoord > b.yCoord) return 1;
 			if (a.xCoord < b.xCoord) return -1;

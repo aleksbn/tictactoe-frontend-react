@@ -1,19 +1,22 @@
 import React from "react";
-import { FormState } from "../../models/common";
+import { IFormState } from "../../models/common";
 import { CreateMove } from "../../models/dto/createMove";
 import { makeamove } from "../../services/gameService";
 import auth from "../../services/authService";
 import GameBoard from "./gameBoard";
 
 interface GameContainerProps {
-	data: any;
+	data: {
+		winnerId: string;
+		_id: string;
+	};
 	onPlay: any;
 	style?: {
 		[key: string]: any;
 	};
 }
 
-interface GameContainerState extends FormState {}
+interface GameContainerState extends IFormState {}
 
 class GameContainer extends React.Component<
 	GameContainerProps,
@@ -83,7 +86,7 @@ class GameContainer extends React.Component<
 					<div className="col-2" />
 					<div className="col-8">
 						<center>
-							<table className="gameTable">
+							<table className="regularTable gameTable">
 								<GameBoard data={data} makeAMove={this.makeAMove} />
 							</table>
 						</center>

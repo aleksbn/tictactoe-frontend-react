@@ -18,5 +18,4 @@ class User implements IUser {
 	}
 }
 
-export { User };
-export type { IUser };
+export { User, IUser };

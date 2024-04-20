@@ -2,16 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../style/containerStyle.css";
 import Button from "./button";
 import "../../style/errorComponentStyle.css";
-
-interface IErrorComponentProps {
-	error: IError;
-	onClose: any;
-}
-
-interface IError {
-	errorCode: string;
-	message: string;
-}
+import { IErrorComponentProps } from "../../models/common";
 
 const ErrorComponent: React.FC<IErrorComponentProps> = ({ error, onClose }) => {
 	const [errorState, setErrorState] = useState({
@@ -35,7 +26,13 @@ const ErrorComponent: React.FC<IErrorComponentProps> = ({ error, onClose }) => {
 					<span>{errorState.message}</span>
 				</p>
 				<Button
-					style={{ backgroundColor: "red", width: "100%", padding: "25px" }}
+					style={{
+						backgroundColor: "red",
+						width: "100%",
+						padding: "25px",
+						borderRadius: "15px",
+						fontSize: "1.4rem",
+					}}
 					name="errorBtn"
 					label="Close"
 					onClick={onClose}
