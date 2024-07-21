@@ -25,57 +25,67 @@ import CreateGame from "./components/pages/createGame";
 import PlayGame from "./components/pages/playGame";
 
 interface AppState {
-	[key: string]: any;
+  [key: string]: any;
 }
 
 class App extends Component {
-	state: AppState = {
-		userId: undefined,
-		nickname: "",
-	};
-	async componentDidMount() {
-		const user = auth.getCurrentUser();
-		let nickname = "";
-		if (user) {
-			const currentUser = await getnickname(user._id!);
-			nickname = toCapitalCase(currentUser.data);
-		}
-		this.setState({ user, nickname });
-	}
+  state: AppState = {
+    userId: undefined,
+    nickname: "",
+  };
+  /**
+   * Asynchronously fetches the current user and their nickname upon component mount.
+   *
+   * This function first retrieves the current user using the `auth.getCurrentUser()` method.
+   * If a user is found, it then calls the `getnickname()` function to fetch the user's nickname.
+   * The fetched nickname is then capitalized using the `toCapitalCase()` function.
+   * Finally, the component's state is updated with the user and nickname.
+   *
+   * @return {Promise<void>} A Promise that resolves when the component's state has been updated.
+   */
+  async componentDidMount() {
+    const user = auth.getCurrentUser();
+    let nickname = "";
+    if (user) {
+      const currentUser = await getnickname(user._id!);
+      nickname = toCapitalCase(currentUser.data);
+    }
+    this.setState({ user, nickname });
+  }
 
-	render() {
-		const { user, nickname } = this.state;
+  render() {
+    const { user, nickname } = this.state;
 
-		return (
-			<React.Fragment>
-				<ToastContainer />
-				<NavBar user={user} nickname={nickname} />
-				<main className="container">
-					<Switch>
-						<Route path="/not-found" component={NotFound} />
-						<ProtectedRoute
-							path="/games/againstpc"
-							render={(props) => <CreateGame {...props} opponent={"pc"} />}
-						/>
-						<ProtectedRoute
-							path="/games/againstplayer"
-							render={(props) => <CreateGame {...props} opponent={"player"} />}
-						/>
-						<ProtectedRoute path="/games/play/:id" component={PlayGame} />
-						<ProtectedRoute path="/games" component={Games} />
-						<ProtectedRoute path="/history" component={History} />
-						<Route path="/login" component={LoginForm} />
-						<Route path="/logout" component={Logout} />
-						<Route path="/register" component={Register} />
-						<ProtectedRoute path="/profile" component={RegisterForm} />
-						<Route path="/home" component={Home} />
-						<Redirect from="/" exact to="/home" />
-						<Redirect to="/not-found" />
-					</Switch>
-				</main>
-			</React.Fragment>
-		);
-	}
+    return (
+      <React.Fragment>
+        <ToastContainer />
+        <NavBar user={user} nickname={nickname} />
+        <main className="container">
+          <Switch>
+            <Route path="/not-found" component={NotFound} />
+            <ProtectedRoute
+              path="/games/againstpc"
+              render={(props) => <CreateGame {...props} opponent={"pc"} />}
+            />
+            <ProtectedRoute
+              path="/games/againstplayer"
+              render={(props) => <CreateGame {...props} opponent={"player"} />}
+            />
+            <ProtectedRoute path="/games/play/:id" component={PlayGame} />
+            <ProtectedRoute path="/games" component={Games} />
+            <ProtectedRoute path="/history" component={History} />
+            <Route path="/login" component={LoginForm} />
+            <Route path="/logout" component={Logout} />
+            <Route path="/register" component={Register} />
+            <ProtectedRoute path="/profile" component={RegisterForm} />
+            <Route path="/home" component={Home} />
+            <Redirect from="/" exact to="/home" />
+            <Redirect to="/not-found" />
+          </Switch>
+        </main>
+      </React.Fragment>
+    );
+  }
 }
 
 export default App;

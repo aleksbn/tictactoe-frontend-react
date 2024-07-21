@@ -1,12 +1,19 @@
-import React, { FC } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { Navbar, Nav } from 'react-bootstrap';
+import React, { FC } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { Navbar, Nav } from "react-bootstrap";
 
 interface NavBarProps {
   user: any;
   nickname: string;
 }
 
+/**
+ * Renders the navigation bar based on the user and nickname.
+ *
+ * @param {any} user - The user object to determine the navigation items.
+ * @param {string} nickname - The nickname of the user for personalized display.
+ * @return {JSX.Element} The JSX element representing the navigation bar.
+ */
 const NavBar: FC<NavBarProps> = ({ user, nickname }) => {
   return (
     <Navbar bg="primary" expand="lg" style={{ marginBottom: 25 }}>
